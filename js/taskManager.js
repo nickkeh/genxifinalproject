@@ -1,3 +1,19 @@
+const createTaskHtml = (id, name, description, assignedTo, dueDate, status) => `
+    <li class="list-group-item" data-task-id=${id}>
+        <div class="d-flex w-100 mt-2 justify-content-between align-items-center">
+            <h5>${name}</h5>
+            <span class="badge ${status === 'TODO' ? 'badge-danger' : 'badge-success'}">${status}</span>
+        </div>
+        <div class="d-flex w-100 mb-3 justify-content-between">
+            <small>Assigned To: ${assignedTo}</small>
+            <small>Due: ${dueDate}</small>
+        </div>
+        <p>${description}</p>
+        <div class="d-flex w-100 justify-content-end">
+            <button class="btn btn-outline-success done-button ${status === 'TODO' ? 'visible' : 'invisible'}">Mark As Done</button>
+        </div>
+    </li>
+`;
 // Create a TaskManager class
 class TaskManager {
     // Set up the tasks and currentId property in the contructor
@@ -19,44 +35,55 @@ class TaskManager {
         // Push the task to the tasks property
         this.tasks.push(task)
     }
-    render() {
-        let taskHtmlList = [];
-        let taskHtml = ''
-        let tasksHtml = ''
+
+     getTaskById(taskId) {
+        // Create a variable to store the found task
+        let foundTask;
+
+        // Loop over the tasks and find the task with the id passed as a parameter
         for (let i = 0; i < this.tasks.length; i++) {
-            let item = this.tasks[i]
-            const dueDate = new Date(item.dueDate)
-            // let formattedDate = dueDate.toISOString().substring(0,10)
-            taskHtml = createTaskHtml(item.name, item.description, item.assignedTo, item.dueDate, item.status)
-            taskHtmlList.push(taskHtml)
-            tasksHtml = tasksHtml + (taskHtml + "\n")          
+            // Get the current task in the loop
+            const task = this.tasks[i];
+
+            // Check if its the right task by comparing the task's id to the id passed as a parameter
+            if (task.id === taskId) {
+                // Store the task in the foundTask variable
+                foundTask = task;
+            }
         }
-        document.querySelector('#tasksList').innerHTML = tasksHtml
-        console.log(tasksHtml)
+
+        // Return the found task
+        return foundTask;
+
     }
+    render() {
+        const tasksHtmlList = [];
 
+        for (let i = 0; i < this.tasks.length; i++) {
+            const task = this.tasks[i];
+
+            const date = new Date(task.dueDate);
+            const formattedDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+
+            // Pass the task id as a parameter
+            const taskHtml = createTaskHtml(task.id, task.name, task.description, task.assignedTo, formattedDate, task.status);
+
+            tasksHtmlList.push(taskHtml);
+        }
+
+        const tasksHtml = tasksHtmlList.join('\n');
+
+        const tasksList = document.querySelector('#tasksList');
+        tasksList.innerHTML = tasksHtml;
+    }
 }
 
-const createTaskHtml = (name, description, assignedTo, dueDate, status) => {
-    const html = `
-    <li class="list-group-item">
-        <div class="d-flex w-100 mt-2 justify-content-between align-items-center">
-            <h5>${name}</h5>
-            <span class="badge badge-danger">${status}</span>
-        </div>
-        <div class="d-flex w-100 mb-3 justify-content-between">
-            <small>Assigned To: ${assignedTo}</small>
-            <small>Due: ${dueDate}</small>
-        </div>
-        <p>${description}</p>
-    </li>
-`
-    return html
-}
-const task1 = createTaskHtml("Nick", "test data", "Nick", "13/03/2021", "TODO")
-const task2 = createTaskHtml("susanti", "test data", "susanti", "13/03/2023", "TODO")
+
+
+// const task1 = createTaskHtml("Nick's Task", "test data", "Nick", "13/03/2021", "TODO")
+// const task2 = createTaskHtml("Susanti Task", "test data", "Susanti", "13/03/2023", "TODO")
 //console.log(task1)
-// console.log(task2)
+//console.log(task2)
 
 
 
