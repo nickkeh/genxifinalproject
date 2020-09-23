@@ -1,5 +1,8 @@
 // Initialize a new TaskManager with currentId set to 0
 const taskManager = new TaskManager(0)
+taskManager.addTask("Nick", "test data", "Nick", "13/03/2021", "TODO")
+taskManager.addTask("susanti", "test data", "susanti", "13/03/2023", "TODO")
+taskManager.render()
 // Select the New Task Form
 const newTaskForm = document.querySelector('#newTaskForm')
 // Add an 'onsubmit' event listener
@@ -23,12 +26,13 @@ const newTaskDueDate = document.querySelector('#newTaskDueDate');
     // Add the task to the task manager
     taskManager.addTask(name, description, assignedTo, dueDate);  
     // Render the tasks
-    //taskManager.render();
+    taskManager.render();
     // Clear the form
     newTaskNameInput.value = '';
     newTaskDescription.value = '';
     newTaskAssignedTo.value = '';
     newTaskDueDate.value = '';
+    
 })
 // Select the Tasks List
 // Add an 'onclick' event listener to the Tasks List
