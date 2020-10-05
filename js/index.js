@@ -1,5 +1,10 @@
 // Initialize a new TaskManager with currentId set to 0
 const taskManager = new TaskManager(0)
+// Load the tasks from localStorage
+taskManager.load();
+
+// Render the tasks to the page
+taskManager.render();
 // taskManager.addTask("Nick", "test data", "Nick", 30-03-2021, "TODO")
 // taskManager.addTask("susanti", "test data", "susanti", 21-03-2023, "TODO")
 // taskManager.render()
@@ -43,15 +48,18 @@ tasksList.addEventListener('click', (event) => {
     // Check if a "Mark As Done" button was clicked
     if (event.target.classList.contains('done-button')) {
         // Get the parent Task        
-        const parentTask = event.target.parentElement.parentElement;    
+        const parentTask = event.target.parentElement.parentElement;
         // // Get the taskId of the parent Task.
-        const taskId = Number(parentTask.dataset.taskId);     
+        const taskId = Number(parentTask.dataset.taskId);
         // console.log(parentTask)   
         // Get the task from the TaskManager using the taskId
         const task = taskManager.getTaskById(taskId);
 
         // Update the task status to 'DONE'
         task.status = 'DONE';
+
+        // Save the tasks to localStorage
+        taskManager.save();
 
         // Render the tasks
         taskManager.render();
